@@ -1,0 +1,57 @@
+plugins {
+    id "java"
+    id "java-library"
+    id "idea"
+    id "io.freefair.lombok" version "4.1.5"
+}
+
+apply from: "version.gradle"
+
+group = "org.camunda.bpm.engine.grpc"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+ext {
+    grpcCoreVersion = "1.0.0"
+    camundaVersion = "7.12.0"
+    camundaSpringBootVersion = "3.4.0"
+    camundaLoggingVersion = "1.9.0"
+    grpcVersion = "1.28.0"
+    grpcSpringBootStarterVersion = "3.5.0"
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    
+    maven {
+        url "https://app.camunda.com/nexus/content/groups/public"
+    }
+}
+
+dependencies {
+    compile "org.camunda.bpm.engine.grpc:core:${grpcCoreVersion}"
+    compile "io.grpc:grpc-stub:${grpcVersion}"
+    compile "io.grpc:grpc-netty-shaded:${grpcVersion}"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+lombok {
+    config["lombok.accessors.chain"] = "true"
+    config["lombok.equalsAndHashCode.callSuper"] = "skip"
+    config["lombok.anyConstructor.addConstructorProperties"] = "true"
+}
