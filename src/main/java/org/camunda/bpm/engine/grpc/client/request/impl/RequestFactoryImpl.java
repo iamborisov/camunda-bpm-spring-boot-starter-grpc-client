@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class RequestFactoryImpl implements RequestFactory {
 

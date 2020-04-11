@@ -1,5 +1,6 @@
 package org.camunda.bpm.engine.grpc.client.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.grpc.client.channel.Channel;
 import org.camunda.bpm.engine.grpc.client.channel.impl.ChannelImpl;
 import org.camunda.bpm.engine.grpc.client.request.RequestFactory;
@@ -16,9 +17,10 @@ import java.util.List;
 
 @Configuration
 @ComponentScan("org.camunda.bpm.engine.grpc.client")
+@RequiredArgsConstructor
 public class ClientConfiguration {
 
-    private List<AbstractSubscriptionHandler> handlers;
+    private final List<AbstractSubscriptionHandler> handlers;
 
     @Bean
     RequestFactory requestFactory(
