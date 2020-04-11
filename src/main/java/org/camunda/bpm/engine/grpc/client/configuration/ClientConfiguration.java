@@ -23,6 +23,8 @@ public class ClientConfiguration {
 
     private final List<AbstractSubscriptionHandler> handlers;
 
+    private final SubscriptionRepository subscriptionRepository;
+
     @Bean
     RequestFactory requestFactory(
         SubscriptionRepository subscriptionRepository,
@@ -52,7 +54,7 @@ public class ClientConfiguration {
     }
 
     @PostConstruct
-    void registerSubscriptions(SubscriptionRepository subscriptionRepository) {
+    void registerSubscriptions() {
         handlers.forEach(handler -> {
             subscriptionRepository.add(
                 SubscriptionImpl.builder()
