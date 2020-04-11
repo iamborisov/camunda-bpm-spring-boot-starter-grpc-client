@@ -20,7 +20,7 @@ public class Variables {
             mapper.writeValueAsString(
                 data.entrySet().stream()
                     .filter(v -> !Objects.isNull(v.getValue()))
-                    .collect(Collectors.toMap(e -> e, Map.Entry::getValue)))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
         );
     }
 }
