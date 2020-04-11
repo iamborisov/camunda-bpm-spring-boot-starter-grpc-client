@@ -33,11 +33,11 @@ public class ClientConfigurationProperties {
 
     // TODO: move AbstractSubscription properties to separated configuration class
 
-    private Integer retryCount;
+    private Integer retryCount = 5;
 
-    private Long retryTimeout;
+    private Long retryTimeout = 1000L;
 
-    private Boolean async;
+    private Boolean async = true;
 
-    private String errorKey;
+    private String errorKey = "error";
 }

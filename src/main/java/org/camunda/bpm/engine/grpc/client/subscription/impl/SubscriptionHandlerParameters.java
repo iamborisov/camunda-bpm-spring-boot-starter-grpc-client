@@ -1,19 +1,17 @@
 package org.camunda.bpm.engine.grpc.client.subscription.impl;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 
-@Data
-@NoArgsConstructor
+@Value
 @AllArgsConstructor
 public class SubscriptionHandlerParameters {
 
-    Integer retryCount = 5;
+    Integer retryCount;
 
-    Long retryTimeout = 1000L;
+    Long retryTimeout;
 
-    Boolean async = true;
+    Boolean async;
 
-    String errorKey = "error";
+    String errorKey;
 }
