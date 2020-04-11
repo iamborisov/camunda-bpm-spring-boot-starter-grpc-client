@@ -9,21 +9,19 @@ import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.AbstractSubscriptionHandler;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionHandlerParameters;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionImpl;
+import org.camunda.bpm.engine.grpc.client.worker.Worker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collection;
+
 @Configuration
 @ComponentScan("org.camunda.bpm.engine.grpc.client")
 @RequiredArgsConstructor
 public class ClientConfiguration implements ApplicationListener<ApplicationReadyEvent> {
-
-    private final ApplicationContext applicationContext;
-
-    private final SubscriptionRepository subscriptionRepository;
 
     @Bean
     RequestFactory requestFactory(
@@ -55,15 +53,35 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
-        event.getApplicationContext().getBeansOfType(AbstractSubscriptionHandler.class)
-            .values()
-            .forEach(handler -> {
-                subscriptionRepository.add(
-                    SubscriptionImpl.builder()
-                        .topicName(handler.getTopicName())
-                        .handler(handler)
-                        .build()
-                );
-            });
+        subscribeTaskHandlers(
+            event.getApplicationContext().getBeansOfType(AbstractSubscriptionHandler.class).values(),
+            event.getApplicationContext().getBean(SubscriptionRepository.class)
+        );
+
+        connect(
+            event.getApplicationContext().getBean(ClientConfigurationProperties.class),
+            event.getApplicationContext().getBean(Worker.class)
+        );
+    }
+
+    private void subscribeTaskHandlers(Collection<AbstractSubscriptionHandler> handlers, SubscriptionRepository subscriptionRepository) {
+        handlers.forEach(handler -> {
+            subscriptionRepository.add(
+                SubscriptionImpl.builder()
+                    .topicName(handler.getTopicName())
+                    .handler(handler)
+                    .build()
+            );
+        });
+    }
+
+    private void connect(ClientConfigurationProperties configurationProperties, Worker worker) {
+        if (configurationProperties.getAutoStart()) {
+            try {
+                worker.start();
+            } catch (Worker.AlreadyStartedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

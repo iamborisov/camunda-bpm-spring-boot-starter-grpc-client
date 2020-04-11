@@ -15,9 +15,11 @@ public class ClientConfigurationProperties {
 
     private String workerId;
 
-    private Boolean usePriority;
+    private Boolean usePriority = true;
 
-    private Long lockDuration;
+    private Long lockDuration = 5000L;
+
+    private Boolean autoStart = true;
 
     // TODO: implement channel settings
 
