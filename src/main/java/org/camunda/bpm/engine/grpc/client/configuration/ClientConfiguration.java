@@ -9,17 +9,17 @@ import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.AbstractSubscriptionHandler;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionHandlerParameters;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionImpl;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.PostConstruct;
-
 @Configuration
 @ComponentScan("org.camunda.bpm.engine.grpc.client")
 @RequiredArgsConstructor
-public class ClientConfiguration {
+public class ClientConfiguration implements ApplicationListener<ApplicationReadyEvent> {
 
     private final ApplicationContext applicationContext;
 
@@ -53,9 +53,9 @@ public class ClientConfiguration {
         );
     }
 
-    @PostConstruct
-    void registerSubscriptions() {
-        applicationContext.getBeansOfType(AbstractSubscriptionHandler.class)
+    @Override
+    public void onApplicationEvent(ApplicationReadyEvent event) {
+        event.getApplicationContext().getBeansOfType(AbstractSubscriptionHandler.class)
             .values()
             .forEach(handler -> {
                 subscriptionRepository.add(
