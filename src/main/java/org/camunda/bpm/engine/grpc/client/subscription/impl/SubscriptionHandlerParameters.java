@@ -1,9 +1,11 @@
 package org.camunda.bpm.engine.grpc.client.subscription.impl;
 
 import lombok.AllArgsConstructor;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class SubscriptionHandlerParameters {
 
