@@ -48,11 +48,15 @@ public class ResponseObserverImpl implements ResponseObserver {
     @Override
     public void onError(Throwable t) {
         log.error("Exception on server side", t);
+
+        locker.unlock();
     }
 
     @Override
     public void onCompleted() {
         log.info("Server response handling completed");
+
+        locker.unlock();
     }
 
     private ExternalTask buildExternalTask(FetchAndLockResponse response) {
