@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Configuration
@@ -50,7 +51,7 @@ public class ClientConfiguration {
         );
     }
 
-    @Bean
+    @PostConstruct
     void registerSubscriptions(SubscriptionRepository subscriptionRepository) {
         handlers.forEach(handler -> {
             subscriptionRepository.add(
