@@ -12,15 +12,12 @@ import org.camunda.bpm.engine.grpc.client.service.ExternalTaskService;
 import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionHandler;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.Errors;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;

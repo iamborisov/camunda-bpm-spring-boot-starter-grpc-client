@@ -6,7 +6,6 @@ import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.grpc.client.channel.Channel;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collections;

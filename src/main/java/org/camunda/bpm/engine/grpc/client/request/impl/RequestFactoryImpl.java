@@ -7,7 +7,6 @@ import org.camunda.bpm.engine.grpc.FetchAndLockRequest.FetchExternalTaskTopic;
 import org.camunda.bpm.engine.grpc.client.request.RequestFactory;
 import org.camunda.bpm.engine.grpc.client.subscription.Subscription;
 import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
