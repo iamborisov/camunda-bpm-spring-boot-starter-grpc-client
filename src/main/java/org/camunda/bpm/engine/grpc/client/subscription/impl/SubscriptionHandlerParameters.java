@@ -7,11 +7,11 @@ import lombok.Value;
 @AllArgsConstructor
 public class SubscriptionHandlerParameters {
 
-    Integer retryCount;
+    Integer retryCount = 5;
 
-    Long retryTimeout;
+    Long retryTimeout = 1000L;
 
-    Boolean async;
+    Boolean async = true;
 
-    String errorKey;
+    String errorKey = "error";
 }
