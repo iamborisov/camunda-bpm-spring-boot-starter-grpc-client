@@ -65,3 +65,5 @@ lombok {
     config["lombok.equalsAndHashCode.callSuper"] = "skip"
     config["lombok.anyConstructor.addConstructorProperties"] = "true"
 }
+
+jar.enabled = true
