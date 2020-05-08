@@ -10,7 +10,6 @@ import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.AbstractSubscriptionHandler;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionHandlerParameters;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionImpl;
-import org.camunda.bpm.engine.grpc.client.watchdog.ChannelStateWatchdog;
 import org.camunda.bpm.engine.grpc.client.worker.Worker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -64,8 +63,7 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
 
         connect(
             event.getApplicationContext().getBean(ClientConfigurationProperties.class),
-            event.getApplicationContext().getBean(Worker.class),
-            event.getApplicationContext().getBean(ChannelStateWatchdog.class)
+            event.getApplicationContext().getBean(Worker.class)
         );
     }
 
@@ -80,11 +78,10 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
         });
     }
 
-    private void connect(ClientConfigurationProperties configurationProperties, Worker worker, ChannelStateWatchdog watchdog) {
+    private void connect(ClientConfigurationProperties configurationProperties, Worker worker) {
         if (configurationProperties.getAutoStart()) {
             try {
                 worker.start();
-                watchdog.start();
             } catch (Worker.AlreadyStartedException e) {
                 log.error("Worker already started", e);
             }
