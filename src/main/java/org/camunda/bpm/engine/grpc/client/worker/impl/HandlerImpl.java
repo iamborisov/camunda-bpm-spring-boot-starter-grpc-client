@@ -32,6 +32,12 @@ public class HandlerImpl implements Handler {
             locker.lock();
         } else {
             log.info("There is no registered external task subscriptions");
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                log.error("Thread interrupted", e);
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package org.camunda.bpm.engine.grpc.client.configuration;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.grpc.client.channel.Channel;
 import org.camunda.bpm.engine.grpc.client.channel.impl.ChannelImpl;
 import org.camunda.bpm.engine.grpc.client.request.RequestFactory;
@@ -9,6 +10,7 @@ import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.AbstractSubscriptionHandler;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionHandlerParameters;
 import org.camunda.bpm.engine.grpc.client.subscription.impl.SubscriptionImpl;
+import org.camunda.bpm.engine.grpc.client.watchdog.ChannelStateWatchdog;
 import org.camunda.bpm.engine.grpc.client.worker.Worker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Collection;
 
+@Slf4j
 @Configuration
 @ComponentScan("org.camunda.bpm.engine.grpc.client")
 @RequiredArgsConstructor
@@ -60,7 +63,8 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
 
         connect(
             event.getApplicationContext().getBean(ClientConfigurationProperties.class),
-            event.getApplicationContext().getBean(Worker.class)
+            event.getApplicationContext().getBean(Worker.class),
+            event.getApplicationContext().getBean(ChannelStateWatchdog.class)
         );
     }
 
@@ -75,12 +79,13 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
         });
     }
 
-    private void connect(ClientConfigurationProperties configurationProperties, Worker worker) {
+    private void connect(ClientConfigurationProperties configurationProperties, Worker worker, ChannelStateWatchdog watchdog) {
         if (configurationProperties.getAutoStart()) {
             try {
                 worker.start();
+                watchdog.start();
             } catch (Worker.AlreadyStartedException e) {
-                e.printStackTrace();
+                log.error("Worker already started", e);
             }
         }
     }
