@@ -6,4 +6,6 @@ import org.camunda.bpm.engine.grpc.FetchAndLockRequest;
 public interface RequestObserver {
 
     StreamObserver<FetchAndLockRequest> getStreamObserver();
+
+    void reset();
 }

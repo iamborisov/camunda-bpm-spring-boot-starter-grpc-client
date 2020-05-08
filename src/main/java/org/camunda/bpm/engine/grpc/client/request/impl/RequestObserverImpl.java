@@ -32,4 +32,9 @@ public class RequestObserverImpl implements RequestObserver {
     private StreamObserver<FetchAndLockRequest> buildStreamObserver() {
         return stub.getStub().fetchAndLock(responseObserver);
     }
+
+    @Override
+    public void reset() {
+        streamObserver = null;
+    }
 }
