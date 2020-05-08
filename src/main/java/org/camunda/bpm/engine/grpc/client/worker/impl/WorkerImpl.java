@@ -54,8 +54,9 @@ public class WorkerImpl implements Worker {
     public void run() {
         while (isRunning.get()) {
             try {
-                watchdog.watch();
-                handler.handle();
+                if (watchdog.watch()) {
+                    handler.handle();
+                }
             } catch (Throwable e) {
                 log.error("Exception while handling worker thread", e);
             }

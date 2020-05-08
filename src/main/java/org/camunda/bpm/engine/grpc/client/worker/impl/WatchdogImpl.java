@@ -15,9 +15,11 @@ public class WatchdogImpl implements Watchdog {
     private final Channel channel;
 
     @Override
-    public void watch() {
+    public boolean watch() {
         ConnectivityState state = channel.getChannel().getState(true);
 
         log.info("Watchdog reports channel state '{}'", state.toString());
+
+        return state == ConnectivityState.READY;
     }
 }
