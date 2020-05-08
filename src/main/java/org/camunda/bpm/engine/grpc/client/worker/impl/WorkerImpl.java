@@ -56,6 +56,8 @@ public class WorkerImpl implements Worker {
             try {
                 if (watchdog.watch()) {
                     handler.handle();
+                } else {
+                    Thread.sleep(1000);
                 }
             } catch (Throwable e) {
                 log.error("Exception while handling worker thread", e);
