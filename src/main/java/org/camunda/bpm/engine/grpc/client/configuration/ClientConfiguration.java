@@ -35,7 +35,8 @@ public class ClientConfiguration implements ApplicationListener<ApplicationReady
             subscriptionRepository,
             properties.getWorkerId(),
             properties.getUsePriority(),
-            properties.getLockDuration()
+            properties.getLockDuration(),
+            properties.getMaxTasks()
         );
     }
 

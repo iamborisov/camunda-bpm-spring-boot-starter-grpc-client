@@ -23,6 +23,8 @@ public class RequestFactoryImpl implements RequestFactory {
 
     private final Long lockDuration;
 
+    private final Integer maxTasks;
+
     @Override
     public FetchAndLockRequest create() {
         return FetchAndLockRequest.newBuilder()
@@ -34,6 +36,7 @@ public class RequestFactoryImpl implements RequestFactory {
                     .map(this::buildTopic)
                     .collect(Collectors.toUnmodifiableList())
             )
+            .setMaxTasks(maxTasks)
             .build();
     }
 

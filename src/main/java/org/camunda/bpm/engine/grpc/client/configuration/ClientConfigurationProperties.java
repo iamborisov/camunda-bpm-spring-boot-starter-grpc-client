@@ -19,6 +19,8 @@ public class ClientConfigurationProperties {
 
     private Long lockDuration = 5000L;
 
+    private Integer maxTasks = 10;
+
     private Boolean autoStart = true;
 
     // TODO: implement channel settings
