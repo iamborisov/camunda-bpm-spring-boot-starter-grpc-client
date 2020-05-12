@@ -4,18 +4,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.grpc.client.request.RequestFactory;
 import org.camunda.bpm.engine.grpc.client.request.RequestObserver;
+import org.camunda.bpm.engine.grpc.client.subscription.Subscription;
 import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
 import org.camunda.bpm.engine.grpc.client.worker.Handler;
-import org.camunda.bpm.engine.grpc.client.worker.Locker;
 import org.camunda.bpm.engine.grpc.client.worker.Watchdog;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class HandlerImpl implements Handler {
-
-    private final Locker locker;
 
     private final Watchdog watchdog;
 
@@ -24,6 +26,8 @@ public class HandlerImpl implements Handler {
     private final RequestObserver requestObserver;
 
     private final RequestFactory requestFactory;
+
+    private Collection<Subscription> lastSubscriptionsState = new ArrayList<>();
 
     @Override
     public void handle() {
@@ -54,11 +58,25 @@ public class HandlerImpl implements Handler {
             return false;
         }
 
+        if (subscriptionRepository.get().equals(lastSubscriptionsState)) {
+            log.info("There is no changes in subscriptions since last call");
+
+            return false;
+        }
+
         requestObserver.getStreamObserver().onNext(
             requestFactory.create()
         );
 
-        locker.lock();
+        lastSubscriptionsState = subscriptionRepository.get();
+
+        log.info(
+            "Subscriptions updated. Now subscribed on topics: {}",
+            subscriptionRepository.get()
+                .stream()
+                .map(Subscription::getTopicName)
+                .collect(Collectors.joining(", "))
+        );
 
         return true;
     }

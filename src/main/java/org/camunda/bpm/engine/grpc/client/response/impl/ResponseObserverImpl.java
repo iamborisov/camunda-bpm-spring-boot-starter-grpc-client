@@ -9,15 +9,12 @@ import org.camunda.bpm.engine.grpc.client.domain.ProcessInstanceId;
 import org.camunda.bpm.engine.grpc.client.domain.Variables;
 import org.camunda.bpm.engine.grpc.client.response.ResponseObserver;
 import org.camunda.bpm.engine.grpc.client.subscription.SubscriptionRepository;
-import org.camunda.bpm.engine.grpc.client.worker.Locker;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ResponseObserverImpl implements ResponseObserver {
-
-    private final Locker locker;
 
     private final SubscriptionRepository subscriptionRepository;
 
@@ -41,22 +38,16 @@ public class ResponseObserverImpl implements ResponseObserver {
         } catch (Exception e) {
             log.error("Exception while handling task {}", response.getTopicName(), e);
         }
-
-        locker.unlock();
     }
 
     @Override
     public void onError(Throwable t) {
         log.error("Exception on server side", t);
-
-        locker.unlock();
     }
 
     @Override
     public void onCompleted() {
         log.info("Server response handling completed");
-
-        locker.unlock();
     }
 
     private ExternalTask buildExternalTask(FetchAndLockResponse response) {
