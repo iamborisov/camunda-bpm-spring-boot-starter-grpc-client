@@ -44,6 +44,7 @@ public class HandlerImpl implements Handler {
     private boolean handleConnection() {
         if (!watchdog.watch()) {
             requestObserver.reset();
+            lastSubscriptionsState.clear();
 
             return false;
         }
