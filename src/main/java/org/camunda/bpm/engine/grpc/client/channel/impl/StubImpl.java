@@ -1,5 +1,6 @@
 package org.camunda.bpm.engine.grpc.client.channel.impl;
 
+import io.grpc.ClientInterceptor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.grpc.ExternalTaskGrpc;
@@ -7,6 +8,7 @@ import org.camunda.bpm.engine.grpc.ExternalTaskGrpc.ExternalTaskStub;
 import org.camunda.bpm.engine.grpc.client.channel.Channel;
 import org.camunda.bpm.engine.grpc.client.channel.Stub;
 import org.springframework.stereotype.Component;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 public class StubImpl implements Stub {
 
     private final Channel channel;
+
+    private final List<ClientInterceptor> clientInterceptors;
 
     private ExternalTaskStub stub;
 
@@ -31,6 +35,6 @@ public class StubImpl implements Stub {
 
         return ExternalTaskGrpc.newStub(
             channel.getChannel()
-        );
+        ).withInterceptors(clientInterceptors.toArray(new ClientInterceptor[0]));
     }
 }
