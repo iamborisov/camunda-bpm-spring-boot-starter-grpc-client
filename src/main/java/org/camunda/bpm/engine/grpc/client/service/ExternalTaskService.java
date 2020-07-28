@@ -20,4 +20,6 @@ public interface ExternalTaskService {
     void handleBpmnError(ExternalTask externalTask, Error error, Variables variables);
 
     void extendLock(ExternalTask externalTask, long newDuration);
+
+    void deleteProcessInstance(String processInstanceId, String reason);
 }

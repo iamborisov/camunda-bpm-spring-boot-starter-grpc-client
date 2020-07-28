@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.grpc.CompleteRequest;
 import org.camunda.bpm.engine.grpc.CompleteResponse;
+import org.camunda.bpm.engine.grpc.DeleteProcessInstanceRequest;
+import org.camunda.bpm.engine.grpc.DeleteProcessInstanceResponse;
 import org.camunda.bpm.engine.grpc.ExtendLockRequest;
 import org.camunda.bpm.engine.grpc.ExtendLockResponse;
 import org.camunda.bpm.engine.grpc.HandleBpmnErrorRequest;
@@ -126,6 +128,18 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
         stub.getStub().extendLock(request, this.<ExtendLockResponse>createLoggingObserver(
             response -> "Lock for Task " + request.getId() + " extended with status " + response.getStatus(),
             "Could not extend the lock for the task " + request.getId() + " (server error)"));
+    }
+
+    @Override
+    public void deleteProcessInstance(String processInstanceId, String reason) {
+        DeleteProcessInstanceRequest request = DeleteProcessInstanceRequest.newBuilder()
+            .setProcessInstanceId(processInstanceId)
+            .setReason(reason)
+            .build();
+
+        stub.getStub().deleteProcessInstance(request, this.<DeleteProcessInstanceResponse>createLoggingObserver(
+            response -> "Delete process instance " + request.getProcessInstanceId() + " complete with status " + response.getStatus(),
+            "Could not delete process instance " + request.getProcessInstanceId() + " (server error)"));
     }
 
     private <T> StreamObserver<T> createLoggingObserver(Function<T, String> succesMessageFunction, String errorMessage) {
