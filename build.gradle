@@ -4,6 +4,7 @@ plugins {
     id "idea"
     id "io.freefair.lombok" version "4.1.5"
     id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id "maven-publish"
 }
 
 apply from: "version.gradle"
@@ -15,7 +16,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 ext {
-    grpcCoreVersion = "1.0.8"
+    grpcCoreVersion = "1.0.9"
     camundaVersion = "7.12.0"
     camundaSpringBootVersion = "3.4.0"
     camundaLoggingVersion = "1.9.0"
@@ -33,10 +34,22 @@ configurations {
     }
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
 repositories {
     mavenCentral()
     mavenLocal()
-    
+
     maven {
         url "https://app.camunda.com/nexus/content/groups/public"
     }
