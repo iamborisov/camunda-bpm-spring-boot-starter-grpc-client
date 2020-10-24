@@ -50,6 +50,7 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
     @Override
     public void complete(ExternalTask externalTask) {
         CompleteRequest request = CompleteRequest.newBuilder()
+            .setProcessInstanceId(externalTask.getProcessInstanceId().getValue())
             .setWorkerId(externalTask.getWorkerId())
             .setId(externalTask.getId())
             .build();
@@ -62,6 +63,7 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
     @Override
     public void complete(ExternalTask externalTask, Variables variables) {
         CompleteRequest request = CompleteRequest.newBuilder()
+            .setProcessInstanceId(externalTask.getProcessInstanceId().getValue())
             .setWorkerId(externalTask.getWorkerId())
             .setId(externalTask.getId())
             .setVariables(variables.getValue())
@@ -76,6 +78,7 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
     public void handleFailure(ExternalTask externalTask, Failure failure, int retries, long retryTimeout) {
         HandleFailureRequest request = HandleFailureRequest.newBuilder()
             .setId(externalTask.getId())
+            .setProcessInstanceId(externalTask.getProcessInstanceId().getValue())
             .setWorkerId(externalTask.getWorkerId())
             .setErrorMessage(failure.getMessage())
             .setErrorDetails(failure.getDetails())
@@ -92,6 +95,7 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
     public void handleBpmnError(ExternalTask externalTask, Error error) {
         HandleBpmnErrorRequest request = HandleBpmnErrorRequest.newBuilder()
             .setId(externalTask.getId())
+            .setProcessInstanceId(externalTask.getProcessInstanceId().getValue())
             .setWorkerId(externalTask.getWorkerId())
             .setErrorCode(error.getCode())
             .setErrorMessage(error.getMessage())
@@ -106,6 +110,7 @@ public class ExternalTaskServiceImpl implements ExternalTaskService {
     public void handleBpmnError(ExternalTask externalTask, Error error, Variables variables) {
         HandleBpmnErrorRequest request = HandleBpmnErrorRequest.newBuilder()
             .setId(externalTask.getId())
+            .setProcessInstanceId(externalTask.getProcessInstanceId().getValue())
             .setWorkerId(externalTask.getWorkerId())
             .setErrorCode(error.getCode())
             .setErrorMessage(error.getMessage())
