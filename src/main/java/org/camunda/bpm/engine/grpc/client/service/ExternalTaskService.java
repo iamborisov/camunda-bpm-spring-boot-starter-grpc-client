@@ -22,4 +22,6 @@ public interface ExternalTaskService {
     void extendLock(ExternalTask externalTask, long newDuration);
 
     void deleteProcessInstance(String processInstanceId, String reason);
+
+    void createProcessInstance(String processName, Variables variables);
 }
